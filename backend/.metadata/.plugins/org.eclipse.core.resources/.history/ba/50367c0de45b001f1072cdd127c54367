@@ -1,0 +1,40 @@
+package com.example.doctor_application.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Repository;
+
+import com.example.doctor_application.dto.Doctor;
+import com.example.doctor_application.repository.DoctorRepo;
+
+import jakarta.persistence.EntityNotFoundException;
+
+@Repository
+public class DoctorDao {
+
+	@Autowired
+	private DoctorRepo drepo;
+	
+	public Doctor signUp(Doctor doctor)
+	{
+//		if(drepo.findByPhoneNumber(doctor.getPhoneNumber())!=null)
+//		{
+//			throw new DuplicateKeyException("Mobile Number Already exist");
+//		}
+//		else if(drepo.findByEmail(doctor.getEmail())!=null)
+//		{
+//			throw new DuplicateKeyException("Email Already exist");
+//		}
+		return drepo.save(doctor);
+	}
+	public Doctor login(String email,String password)
+	{
+		Doctor doctor=drepo.findByEmailAndPassword(email, password);
+		if(doctor==null)
+		{
+			throw new EntityNotFoundException("Credential missmatch");
+		}
+		return doctor;
+	}
+	
+}

@@ -1,0 +1,20 @@
+package com.example.doctor_application.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.example.doctor_application.dto.Doctor;
+import com.example.doctor_application.repository.DoctorRepo;
+
+@Repository
+public class DoctorDao {
+
+	@Autowired
+	private DoctorRepo drepo;
+	
+	public Doctor sign_Up(Doctor doctor)
+	{
+		return drepo.save(doctor);
+	}
+	
+}

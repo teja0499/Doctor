@@ -1,0 +1,106 @@
+package com.example.doctor_application.contoller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import com.example.doctor_application.dao.PatientDao;
+import com.example.doctor_application.dto.Patient;
+
+@RestController
+public class PatientController {
+
+	@Autowired
+	private PatientDao pDao;
+
+	private String uploadDir;
+
+	public ResponseEntity<?> signUp(
+	        @RequestParam("name") String name,
+	        @RequestParam("email") String email,
+	        @RequestParam("mobileNumber") String mobileNumber,
+	        @RequestParam("illness") String illness,
+	        @RequestParam("surgery") String surgery,
+	        @RequestParam("age") int age,
+	        @RequestParam("password") String password,
+	        @RequestParam(value = "profilePicture", required = false) MultipartFile profilePicture) {
+	    try {
+	        // Print received parameters
+	        System.out.println("Name: " + name);
+	        System.out.println("Email: " + email);
+	        System.out.println("Mobile Number: " + mobileNumber);
+	        System.out.println("Illness: " + illness);
+	        System.out.println("Surgery: " + surgery);
+	        System.out.println("Age: " + age);
+	        System.out.println("Password: " + password);
+	        if (profilePicture != null) {
+	            System.out.println("Received file: " + profilePicture.getOriginalFilename());
+	        }
+
+	       
+	        String uploadDir = "../../../../main/resource/static/profile";
+	        File dir = new File(uploadDir);
+	        if (!dir.exists()) {
+	            dir.mkdirs();
+	        }
+
+	        // Save the file with a random name
+	        if (profilePicture != null && !profilePicture.isEmpty()) {
+	            String fileName = System.currentTimeMillis() + "_user_" + mobileNumber + "_" + profilePicture.getOriginalFilename();
+	            File file = new File(uploadDir + File.separator + fileName);
+	            profilePicture.transferTo(file);
+	        }
+
+	        // Proceed with saving patient details
+	        Patient newpatient = new Patient();
+	        newpatient.setName(name);
+	        newpatient.setEmail(email);
+	        newpatient.setMobileNumber(mobileNumber);
+	        newpatient.setIllness(illness);
+	        newpatient.setSurgery(surgery);
+	        newpatient.setAge(age);
+	        newpatient.setPassword(password);
+
+	        Patient patient = pDao.signUp(newpatient);
+	        return ResponseEntity.status(HttpStatus.OK).body(patient);
+	    } catch (Exception e) {
+	        e.printStackTrace(); // Print stack trace for debugging
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server error: " + e.getMessage());
+	    }
+	}
+	@PostMapping("/patient/login")
+	public ResponseEntity<?> login(@RequestHeader("email") String email, @RequestHeader("password") String password) {
+		System.out.println("working");
+		try {
+			Patient patient = pDao.login(email, password);
+			return ResponseEntity.status(200).body(patient);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		}
+	}
+
+	@GetMapping("/admin/get_users")
+	public ResponseEntity<?> getUsers() {
+		System.out.println("working");
+		try {
+			List<Patient> patient = pDao.getAllUser();
+			return ResponseEntity.status(200).body(patient);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		}
+	}
+}

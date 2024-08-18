@@ -1,0 +1,11 @@
+package com.example.doctor_application.contoller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.doctor_application.dao.ConsultationDao;
+
+@RestController
+public class ConsultationController {
+	
+//	private ConsultationDao 
+}

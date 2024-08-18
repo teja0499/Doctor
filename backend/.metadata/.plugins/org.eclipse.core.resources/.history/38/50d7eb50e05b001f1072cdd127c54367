@@ -1,0 +1,12 @@
+package com.example.doctor_application.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.doctor_application.dto.Doctor;
+
+public interface DoctorRepo extends JpaRepository<Doctor, Long>{
+	
+	 Doctor findByPhoneNumber(String phoneNumber);
+	 Doctor findByEmail(String email);
+	 
+}

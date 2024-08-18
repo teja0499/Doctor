@@ -1,0 +1,20 @@
+package com.example.doctor_application.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.example.doctor_application.dto.Consultation;
+import com.example.doctor_application.repository.ConsultationRepo;
+
+
+@Repository
+public class ConsultationDao {
+
+	@Autowired
+	private ConsultationRepo cRepo;
+	
+	public Consultation save(Consultation consultation)
+	{
+		return cRepo.save(consultation);
+	}
+}
