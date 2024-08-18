@@ -1,0 +1,67 @@
+ECHO is on.
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React build
+build/
+dist/
+
+# Local environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Log files
+*.log
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+desktop.ini
+
+# Eclipse project files (if using Eclipse for backend)
+.metadata/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.project
+.classpath
+.cproject
+.settings/
+
+# Java build files (if using Java backend)
+target/
+bin/
+*.class
+*.war
+*.jar
+
+# Maven
+.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# IntelliJ IDEA
+/.idea
+*.iml
