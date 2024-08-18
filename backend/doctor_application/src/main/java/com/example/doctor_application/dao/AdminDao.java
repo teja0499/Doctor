@@ -1,0 +1,32 @@
+package com.example.doctor_application.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.example.doctor_application.dto.Admin;
+import com.example.doctor_application.repository.AdminRepo;
+
+import jakarta.persistence.EntityNotFoundException;
+
+@Repository
+public class AdminDao {
+	
+	@Autowired
+	private AdminRepo aRepo;
+	
+	public Admin signUp(Admin admin)
+	{
+		return aRepo.save(admin);
+	}
+	
+	public Admin login(String email,String password)
+	{
+		Admin admin=aRepo.findByEmailAndPassword(email, password);
+		
+		if(admin==null)
+		{
+			throw new EntityNotFoundException("Credential missmatch");
+		}
+		return admin;
+	}
+}
