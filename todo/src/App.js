@@ -20,6 +20,8 @@ import ConsultationDetailsPage from './components/consultationdetailspage';
 import AdminRegisterForm from './components/admin_register_form';
 import AdminLoginForm from './components/admin_login';
 import NewDoctor from './components/newdoctor';
+import AllPatients from './components/allpatients';
+import GetAllprescription from './components/all_prescription';
 
 
 function App() {
@@ -60,6 +62,8 @@ function App() {
           <Route path="/admin_register_form" element={<AdminRegisterForm showAlert={showAlert} />} />
           <Route path="/admin_login" element={<AdminLoginForm showAlert={showAlert} />} />
           <Route path="/new_doctor" element={<NewDoctor showAlert={showAlert} />} />
+          <Route path="/all_patients" element={<AllPatients showAlert={showAlert} />} />
+          <Route path="/all_prescription" element={<GetAllprescription showAlert={showAlert} />} />
         </Routes>
       {/* </div> */}
     </Router>

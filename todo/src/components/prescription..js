@@ -59,6 +59,7 @@ export default function Prescription(props) {
             }
         } catch (error) {
             console.log(error);
+            props.showAlert('Internal server Issue', "Error");
             // Handle error (e.g., show an alert or message)
         }
     };

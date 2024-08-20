@@ -63,7 +63,7 @@ export default function AllDoctor(props) {
                         <strong>Email:</strong> {doctor.email}
                     </div>
                     <div style={{ marginBottom: '0.5rem' }}>
-                        <strong>Mobile Number:</strong> {doctor.mobile_number}
+                        <strong>Mobile Number:</strong> {doctor.mobileNumber}
                     </div>
                     <div style={{ marginBottom: '0.5rem' }}>
                         <strong>Address:</strong> {doctor.address}

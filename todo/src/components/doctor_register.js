@@ -11,43 +11,54 @@ export default function DoctorRegisterform(props) {
     const [specialty, setSpecialty] = useState('');
     const [experience, setExperience] = useState('');
     const [address, setAddress] = useState('');
-
+    const [profilePicture, setProfilePicture] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
-        try {
-            event.preventDefault();
-            if(password===confirmPassword)
-           { localStorage.clear();
+        event.preventDefault();
+        if (password === confirmPassword) {
+            localStorage.clear();
             const body = {
                 name,
                 email,
                 mobileNumber,
                 specialty,
-                experience,
+                yearsOfExperience: experience,
                 address,
                 password,
             };
-            const data = await doctor_Ragister(body);
-            if (data) {
-                props.showAlert("Account created Successfully", "success");
-                navigate("/");
+          
+
+            try {
+                const data = await doctor_Ragister(body,profilePicture);
+                if (data) {
+                    props.showAlert("Account created Successfully", "success");
+                    navigate("/");
+                }
+                console.log(data);
+            } catch (error) {
+                console.log(error.response.data);
+                props.showAlert(error.response.data, "danger");
             }
-            console.log(body);
-        }else 
-        {
-            props.showAlert("Password and confirm password not match", "danger");
-        }
-        } catch (error) {
-            console.log(error.response.data);
-            props.showAlert(error.response.data, "danger");
+        } else {
+            props.showAlert("Password and confirm password do not match", "danger");
         }
     };
 
     return (
-        <div className=' container'>
+        <div className='container'>
             <h1>Doctor Registration Form</h1>
             <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+                    <label htmlFor="profilePicture" className="form-label">Profile Picture</label>
+                    <input
+                        type="file"
+                        className="form-control"
+                        id="profilePicture"
+                        onChange={(e) => setProfilePicture(e.target.files[0])}
+                        required
+                    />
+                </div>
                 <div className="row mb-3">
                     <div className="col-md-6">
                         <label htmlFor="name" className="form-label">Name</label>
@@ -161,7 +172,7 @@ export default function DoctorRegisterform(props) {
                         type="button"
                         className="btn btn-secondary"
                         onClick={() => navigate('/doctor_login')}
-                    > 
+                    >
                         Login
                     </button>
                 </div>

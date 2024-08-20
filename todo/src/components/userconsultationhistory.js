@@ -40,13 +40,16 @@ export default function UserConsultationHistory() {
 
     return (
         <div className='container mt-4'>
-            <div className='row'>
+          { history.length!==0? <div className='row'>
                 {history.map((consult, index) => (
                     <div key={index} className="col-md-4 mb-4">
                         <ConsultCard consult={consult} generatePDF={generatePDF} />
                     </div>
                 ))}
             </div>
+            :
+            <h4 style={{textAlign:'center'}}><p>No consultation found</p></h4>
+            }
         </div>
     );
 }

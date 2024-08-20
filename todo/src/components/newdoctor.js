@@ -1,79 +1,115 @@
 import React, { useState, useEffect } from 'react'
 import { approved_doctor, get_new_doctor } from '../Service/api'
 
+
 export default function NewDoctor() {
-    const [doctorData, setDoctorData] = useState([])
+    const [doctorData, setDoctorData] = useState([]);
     const [info, setInfo] = useState(false);
-    const [doctor, setDoctor] = useState();
+    const [doctor, setDoctor] = useState(null);
+
     const getDoctors = async () => {
         try {
-            const data = await get_new_doctor()
-            setDoctorData(data)
+            const data = await get_new_doctor();
+            setDoctorData(data);
             console.log(data);
-
         } catch (error) {
-
+            console.error(error);
         }
-    }
+    };
+
     const showInfo = (data) => {
         console.log(data);
-
         setInfo(true);
         setDoctor(data);
-    }
+    };
 
-    const isApprove = (data, flag) => {
-       
+    const isApprove = async (data, flag) => {
         try {
-         const doctorData = {
-             ...data,
-             adminApprove: flag,
-         }
-         const newData=approved_doctor(doctorData)
-         getDoctors()
+            const doctorData = {
+                ...data,
+                adminApprove: flag,
+            };
+            await approved_doctor(doctorData);
+            getDoctors();
         } catch (error) {
-         
+            console.error(error);
         }
- 
-     }
+    };
 
     useEffect(() => {
-        getDoctors()
-    }, [])
+        getDoctors();
+    }, []);
+
     return (
         <div className='container'>
-            {
-                doctorData.map((data, index) => {
-                    return (
-                        <NewDoctorCard key={index} doctor={data} isApprove={isApprove}/>
-                    )
-                })
+            {!info && (
+                doctorData.length!==0 ?  <div className='row'>
+                    {doctorData.map((data, index) => (
+                        <div className='col-md-4 mb-4' key={index}>
+                            <NewDoctorCard
+                                key={index}
+                                doctor={data}
+                                isApprove={isApprove}
+                                showInfo={showInfo}
+                            />
+                        </div>
+                    ))}
+                </div>:
+                <h4 style={{textAlign:'center'}}><p>No New Docotor Register</p></h4>
+            )
             }
+            {info && doctor && (
+                <div>
+                    <h2>Information Display</h2>
+                    <div style={{ marginBottom: '1rem' }}>
+                        <div style={{ marginBottom: '0.5rem' }}>
+                            <strong>Name:</strong> {doctor.name}
+                        </div>
+                        <div style={{ marginBottom: '0.5rem' }}>
+                            <strong>Email:</strong> {doctor.email}
+                        </div>
+                        <div style={{ marginBottom: '0.5rem' }}>
+                            <strong>Mobile Number:</strong> {doctor.mobileNumber}
+                        </div>
+                        <div style={{ marginBottom: '0.5rem' }}>
+                            <strong>Address:</strong> {doctor.address}
+                        </div>
+                        <div style={{ marginBottom: '0.5rem' }}>
+                            <strong>Specialty:</strong> {doctor.specialty}
+                        </div>
+                        <div style={{ marginBottom: '0.5rem' }}>
+                            <strong>Years of Experience:</strong> {doctor.yearsOfExperience}
+                        </div>
+                    </div>
+                    <button className="btn btn-primary" onClick={() => setInfo(false)}>
+                        Close
+                    </button>
+                </div>
+            )}
         </div>
-    )
+    );
 }
 
-
 export const NewDoctorCard = (props) => {
-    const { name, did, specialty, } = props.doctor;
+    const { name, did, specialty,profilePicture } = props.doctor;
     const { showInfo ,isApprove} = props
 
    
     return (
         <div>
             <div className="card" style={{ width: "18rem" }}>
-                <img src="..." className="card-img-top" alt="..." />
+            <img src={profilePicture} className="card-img-top" alt="..." style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
                 <div className="card-body">
                     <h5 className="card-title">Dr. {name}</h5>
-                    <h6 className="card-title">{specialty}</h6>
-                    <button className="btn btn-primary" onClick={() => showInfo(props.doctor)}>
-                        Doctor Info
-                    </button>
-                    <button className="btn btn-primary" onClick={() => isApprove(props.doctor,true)}>
+                    <h6 className="card-title">specialty : {specialty}</h6>
+                    <button className="btn btn-primary mx-2" onClick={() => isApprove(props.doctor,true)}>
                         Approve
                     </button>
-                    <button className="btn btn-primary" onClick={() => isApprove(props.doctor,false)}>
+                    <button className="btn btn-primary  mx-2" onClick={() => isApprove(props.doctor,false)}>
                         Reject
+                    </button>
+                    <button className="btn btn-primary mx-2 mt-2 " onClick={() => showInfo(props.doctor)}>
+                        Doctor Info
                     </button>
                 </div>
             </div>

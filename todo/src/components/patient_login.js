@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { patient_login, test } from '../Service/api';
+import Loader from '../loader/loader';
 // import { login } from '../Service/api';
 // import { useDispatch } from 'react-redux';
 // import { setAdmin, setUser_id } from './redux/reducer/authSlice'; // Adjust the path as necessary
@@ -8,12 +9,15 @@ import { patient_login, test } from '../Service/api';
 export default function PatientLogin(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const[loading ,setloading]=useState(false)
 
   const navigate = useNavigate();
   // const dispatch = useDispatch(); 
 
   const handleSubmit = async (event) => {
     try {
+      setloading(true)
+
       event.preventDefault()
         const data= await patient_login({email,password}); 
         console.log(data);
@@ -25,7 +29,7 @@ export default function PatientLogin(props) {
               localStorage.setItem('name', data.name);
               localStorage.setItem('password', data.password);
               localStorage.setItem('userType', "user");
-
+              setloading(false)
           navigate("/all_doctor")
         }
     } catch (error) {
@@ -39,6 +43,7 @@ export default function PatientLogin(props) {
 
      
     }
+    setloading(false)
   };
 
   const havingData=async ()=>{
@@ -68,7 +73,7 @@ export default function PatientLogin(props) {
   
   
   return (
-    <div className='container' style={{ marginBottom:'5rem' }}>
+   (loading ?  <Loader/> : <div className='container' style={{ marginBottom:'5rem' }}>
         <h2>User Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -109,6 +114,6 @@ export default function PatientLogin(props) {
           
         </div>
       </form>
-    </div>
+    </div> )
   );
 }

@@ -9,12 +9,15 @@ export default function AdminRegisterForm(props) {
     const [mobileNumber, setMobileNumber] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const[loading ,setloading]=useState(false)
 
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         try {
             event.preventDefault();
+            setloading(false)
+           if(password===confirmPassword){
             const body = {
                 name,
                 email,
@@ -26,6 +29,10 @@ export default function AdminRegisterForm(props) {
                 props.showAlert("Account created Successfully", "success");
                 navigate("/admin_login");
             }
+           }
+           else{
+            props.showAlert("Password andConfirm Password does not match", "danger");
+           }
         } catch (error) {
             console.log(error.response.data);
             props.showAlert(error.response.data, "danger");

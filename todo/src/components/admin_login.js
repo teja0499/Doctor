@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../loader/loader';
 
 export default function AdminLoginForm(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const[loading ,setloading]=useState(false)
 
     const navigate = useNavigate();
  
     const handleSubmit = async (e) => {
         try {
+            setloading(true)
             e.preventDefault();
             // const data = await admin_login({ email, password });
             const data={}
@@ -19,18 +22,21 @@ export default function AdminLoginForm(props) {
                 localStorage.setItem('email', data.email);
                 localStorage.setItem('password', data.password);
                 localStorage.setItem('userType', "admin");
-                navigate("/admin_dashboard");
+                setloading(false)
+                navigate("/new_doctor");
             }
         } catch (error) {
             console.log(error);
-            // props.showAlert(error.response.data, "danger");
+            setloading(false)
+            props.showAlert(error?.response?.data, "danger");
         }
+        setloading(false)
     };
 
     return (
         <div className='container' style={{ marginBottom: '5rem' }}>
             <h2>Admin Login</h2>
-            <form onSubmit={handleSubmit}>
+           {loading ?<Loader/> :<form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">
                         Email
@@ -63,15 +69,15 @@ export default function AdminLoginForm(props) {
                     <button type="submit" className="btn btn-primary mx-4">
                         Submit
                     </button>
-                    <button
+                    {/* <button
                         type="button"
                         className="btn btn-primary mx-4"
                         onClick={() => navigate('/admin_register_form')}
                     >
                         Register
-                    </button>
+                    </button> */}
                 </div>
-            </form>
+            </form>}
         </div>
     );
 }

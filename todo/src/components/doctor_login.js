@@ -18,7 +18,7 @@ export default function DoctorLogin(props) {
         props.showAlert("Login  Successfully","success")
         localStorage.setItem('did', data.did);
         localStorage.setItem('name', data.name);
-        localStorage.setItem('add', data.address);
+        localStorage.setItem('address', data.address);
         localStorage.setItem('password', data.password);
         localStorage.setItem('userType', "doctor");
         navigate("/consultation_req")

@@ -11,57 +11,82 @@ export default function PatientRagisterForm(props) {
     const [illness, setIllness] = useState('');
     const [surgery, setSurgery] = useState('');
     const [age, setAge] = useState('');
+    const [profilePic, setProfilePic] = useState(null);
 
     const navigate = useNavigate();
+
+    const handleFileChange = (event) => {
+        setProfilePic(event.target.files[0]);
+    };
 
     const handleSubmit = async (event) => {
         try {
             event.preventDefault();
-            if(password===confirmPassword)
-           { localStorage.clear();
-            const body = {
-                name,
-                email,
-                mobileNumber,
-                illness,
-                surgery,
-                age,
-                password,
-            };
-            const data = await patient_Ragister(body);
-            if (data) {
-                props.showAlert("Account created Successfully", "success");
-               
-                navigate("/");
-            }
-            console.log(data);}
-            else{
-                props.showAlert("Password and confirm password does not match", "danger");
+            if (password === confirmPassword) {
+                localStorage.clear();
+                // const file = fileInput.files[0]
+                const body = {
+                    name,
+                    email,
+                    mobileNumber,
+                    illness,
+                    surgery,
+                    age,
+                    password,
+                };
+                const data = await patient_Ragister(body,profilePic);
+                if (data) {
+                    props.showAlert("Account created Successfully", "success");
+                    navigate("/");
+                }
+                console.log(data);
+            } else {
+                props.showAlert("Password and confirm password do not match", "danger");
             }
         } catch (error) {
-            console.log(error.response.data);
-            props.showAlert(error.response.data, "danger");
+            if((error?.response?.data))
+            {
+                props.showAlert(error.response.data, "danger");
+            }
+           else{
+            props.showAlert("Internal server issue", "danger");
+           }
+            
         }
+        
     };
 
     return (
         <div className='container my-2'>
             <h1>User Registration Form</h1>
             <form onSubmit={handleSubmit}>
-                <div className="row mb-3">
-                    <div className="col-md-6">
+                <div className="row mb-6">
+                    <div className="col-md-12">
                         <label htmlFor="name" className="form-label">Name</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="name"
-                            placeholder='Name'
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
+                        <div className="d-flex align-items-center">
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="name"
+                                placeholder='Name'
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                            <input
+                                type="file"
+                                className="form-control ms-3"
+                                id="profilePic"
+                                onChange={handleFileChange}
+                                required
+                            />
+                        </div>
                     </div>
-                    <div className="col-md-6">
+                   
+                </div>
+
+                <div className="row mb-3">
+                <div className="col-md-4">
                         <label htmlFor="age" className="form-label">Age (in years)</label>
                         <input
                             type="number"
@@ -73,10 +98,7 @@ export default function PatientRagisterForm(props) {
                             required
                         />
                     </div>
-                </div>
-
-                <div className="row mb-3">
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                         <label htmlFor="mobileNumber" className="form-label">Mobile Number</label>
                         <input
                             type="tel"
@@ -89,7 +111,7 @@ export default function PatientRagisterForm(props) {
                             required
                         />
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                         <label htmlFor="email" className="form-label">Email</label>
                         <input
                             type="email"
@@ -103,31 +125,31 @@ export default function PatientRagisterForm(props) {
                     </div>
                 </div>
 
-                <div className="mb-3">
-                    <label htmlFor="illness" className="form-label">Illness</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="illness"
-                        placeholder='Illness'
-                        value={illness}
-                        onChange={(e) => setIllness(e.target.value)}
-                        required
-                    />
-                </div>
-
-             
-                <div className="mb-3">
-                    <label htmlFor="surgery" className="form-label">Surgery</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="surgery"
-                        placeholder='Surgery'
-                        value={surgery}
-                        onChange={(e) => setSurgery(e.target.value)}
-                        required
-                    />
+                <div className="row mb-3">
+                    <div className="col-md-6">
+                        <label htmlFor="illness" className="form-label">Illness</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="illness"
+                            placeholder='Illness'
+                            value={illness}
+                            onChange={(e) => setIllness(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="surgery" className="form-label">Surgery</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="surgery"
+                            placeholder='Surgery'
+                            value={surgery}
+                            onChange={(e) => setSurgery(e.target.value)}
+                            required
+                        />
+                    </div>
                 </div>
 
                 <div className="row mb-3">
@@ -157,7 +179,6 @@ export default function PatientRagisterForm(props) {
                     </div>
                 </div>
 
-                
                 <div>
                     <button type="submit" className="btn btn-primary mx-3">
                         Submit
