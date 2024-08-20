@@ -88,4 +88,17 @@ public class ConsultationController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 		}
 	}
+	
+	@GetMapping("/admin/get_all_prescription")
+	public ResponseEntity<?> getAllConsultation()
+	{
+		System.out.println("working");
+		try {
+			List<Consultation> consultations=cDao.getAllConsultation();
+			return ResponseEntity.ok(consultations);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		}
+	}
 }

@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.doctor_application.dao.DoctorDao;
+//import com.example.doctor_application.dao.Helper;
 import com.example.doctor_application.dto.Doctor;
+import com.example.doctor_application.dto.Patient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -23,18 +28,31 @@ public class DoctorController {
 	
 	@Autowired
 	private DoctorDao doctorDao;
+	
+//	@Autowired
+//	private Helper helper;
+	
+	 private final ObjectMapper objectMapper = new ObjectMapper();
+	
 	@GetMapping("/")
-	public ResponseEntity<?> test()
+	public String test()
 	{
 		System.out.println("Working");
-		return ResponseEntity.ok(200);
+//		return ResponseEntity.ok(200);
+		return "hello Tejas";
 	}
 	
 	@PostMapping("/doctor/sign_up")
-	public ResponseEntity<?> signUp(@RequestBody Doctor newdoctor)
+	public ResponseEntity<?> signUp( @RequestParam("file") MultipartFile file,@RequestParam("data") String jsonData)
 	{
-		System.out.println(newdoctor);
+//		System.out.println(newdoctor);
 		try {
+			
+			 Doctor newdoctor = objectMapper.readValue(jsonData, Doctor.class);
+//			 String path=helper.uploadFile(file,"d"+newdoctor.getMobileNumber());
+//			 newdoctor.setProfilePicture(path);
+//			
+//			System.out.println(path);
 			 Doctor savedDoctor = doctorDao.signUp(newdoctor);
 	         return ResponseEntity.status(HttpStatus.CREATED).body(savedDoctor);
 		} 

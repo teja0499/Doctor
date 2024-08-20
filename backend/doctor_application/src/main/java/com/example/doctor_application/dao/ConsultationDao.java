@@ -41,4 +41,10 @@ public class ConsultationDao {
 		consultation.setView(true);
 		return cRepo.save(consultation);
 	}
+	
+	public List<Consultation> getAllConsultation()
+	{
+		List<Consultation>consultations=cRepo.findAll();
+		return consultations;
+	}
 }

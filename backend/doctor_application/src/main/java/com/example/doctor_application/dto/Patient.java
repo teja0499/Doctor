@@ -126,7 +126,16 @@ public class Patient {
 	public void setDoctors(List<Doctor> doctors) {
 		this.doctors = doctors;
 	}
+
+	@Override
+	public String toString() {
+		return "Patient [pid=" + pid + ", profilePicture=" + profilePicture + ", name=" + name + ", age=" + age
+				+ ", email=" + email + ", mobileNumber=" + mobileNumber + ", surgery=" + surgery + ", illness="
+				+ illness + ", password=" + password + ", doctors=" + doctors + "]";
+	}
     
+	
+	
     
 
 
