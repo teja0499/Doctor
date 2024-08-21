@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { patient_Ragister } from '../Service/api';
+import Loader from '../loader/loader';
 
 export default function PatientRagisterForm(props) {
     const [name, setName] = useState('');
@@ -12,6 +13,7 @@ export default function PatientRagisterForm(props) {
     const [surgery, setSurgery] = useState('');
     const [age, setAge] = useState('');
     const [profilePic, setProfilePic] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -23,6 +25,7 @@ export default function PatientRagisterForm(props) {
         try {
             event.preventDefault();
             if (password === confirmPassword) {
+                setLoading(true)
                 localStorage.clear();
                 // const file = fileInput.files[0]
                 const body = {
@@ -37,12 +40,14 @@ export default function PatientRagisterForm(props) {
                 const data = await patient_Ragister(body,profilePic);
                 if (data) {
                     props.showAlert("Account created Successfully", "success");
+                    setLoading(false)
                     navigate("/");
                 }
                 console.log(data);
             } else {
                 props.showAlert("Password and confirm password do not match", "danger");
             }
+            setLoading(false)
         } catch (error) {
             if((error?.response?.data))
             {
@@ -53,13 +58,14 @@ export default function PatientRagisterForm(props) {
            }
             
         }
+        setLoading(false)
         
     };
 
     return (
         <div className='container my-2'>
             <h1>User Registration Form</h1>
-            <form onSubmit={handleSubmit}>
+            {!loading && <form onSubmit={handleSubmit}>
                 <div className="row mb-6">
                     <div className="col-md-12">
                         <label htmlFor="name" className="form-label">Name</label>
@@ -191,7 +197,8 @@ export default function PatientRagisterForm(props) {
                         Login
                     </button>
                 </div>
-            </form>
+            </form>}
+            {loading && <Loader/>}
         </div>
     );
 }

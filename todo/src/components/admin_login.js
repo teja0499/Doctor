@@ -31,7 +31,7 @@ export default function AdminLoginForm(props) {
         } catch (error) {
             console.log(error);
             setloading(false)
-            props.showAlert(error.response.data || "internal server erroe","danger")
+            props.showAlert(error?.response?.data ?? "internal server erroe","danger")
         }
         setloading(false)
     };

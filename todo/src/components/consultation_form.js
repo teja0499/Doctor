@@ -16,6 +16,15 @@ const ConsultationForm = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const { doctor } = location.state || {};
+    const [loading,setLoading]=useState(false);
+
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+    });
+
    
 
     const handleChange = (e) => {
@@ -43,6 +52,7 @@ const ConsultationForm = (props) => {
     const handleSubmit = async (transactionId) => {
         try {
             setPaymet(false)
+            setLoading(true)
            console.log(formData);
            const body={
             ...formData.step1,
@@ -51,7 +61,9 @@ const ConsultationForm = (props) => {
             pid:localStorage.getItem("pid"),
             patientName:localStorage.getItem("name"),
             doctorName:doctor.name,
-            transactionId:transactionId
+            address:doctor.address,
+            transactionId:transactionId,
+            date:formattedDate
            }
            const data=await saveConsultation(body);
 
@@ -63,6 +75,7 @@ const ConsultationForm = (props) => {
             props.showAlert(error.response.data,"danger")  
             setPaymet(false);
         }
+        setLoading(false)
     //    navigate(-1);
     };
     const paymentMethod=()=>{

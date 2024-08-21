@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { userConsulationHistory } from '../Service/api';
 import ConsultCard from './consult_card';
 import jsPDF from 'jspdf';
+import Loader from '../loader/loader';
 
 export default function UserConsultationHistory() {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
+    
 
     const getHistory = async () => {
         try {
@@ -54,7 +56,9 @@ export default function UserConsultationHistory() {
 
     return (
         <div className='container mt-4'>
-          { history.length!==0? <div className='row'>
+            {loading && <Loader/>  }
+       {!loading &&    <div>
+         { history.length!==0? <div className='row'>
                 {history.map((consult, index) => (
                     <div key={index} className="col-md-4 mb-4">
                         <ConsultCard consult={consult} generatePDF={generatePDF} />
@@ -64,6 +68,7 @@ export default function UserConsultationHistory() {
             :
             <h4 style={{textAlign:'center'}}><p>No consultation found</p></h4>
             }
+            </div>}
         </div>
     );
 }

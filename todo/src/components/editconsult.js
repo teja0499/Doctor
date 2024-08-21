@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { completeConsulatationReq } from '../Service/api';
+import Loader from '../loader/loader';
 
 
 export default function EditConsult() {
     const location = useLocation();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
  
     const { data } = location.state || {};
@@ -23,22 +25,24 @@ export default function EditConsult() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true)
             const finalData={...data,medicine,careToBeTaken}
           const updateData=  await completeConsulatationReq(finalData);
+          setLoading(false)
           if(updateData)
           {
             navigate(-1); 
           }
         } catch (error) {
             console.error("Error updating consultation:", error);
-           
         }
+        setLoading(false)
     };
 
     return (
         <div className="container">
             <h2>Edit Consultation</h2>
-            <form onSubmit={handleSubmit}>
+           { !loading &<form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="medicine">Medicine</label>
                     <textarea
@@ -60,7 +64,8 @@ export default function EditConsult() {
                     />
                 </div>
                 <button type="submit" className="btn btn-primary">Update</button>
-            </form>
+            </form>}
+            {loading && <Loader/>}
         </div>
     );
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import { completeConsulatationReq } from '../Service/api';
+import Loader from '../loader/loader';
 
 export default function Prescription(props) {
     const location = useLocation();
@@ -9,6 +10,7 @@ export default function Prescription(props) {
     const [care, setCare] = useState('');
     const [medicine, setMedicine] = useState('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString('en-US', {
@@ -19,13 +21,13 @@ export default function Prescription(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setLoading(true)
         const prescriptionData = {
             ...data,
             doctorName: localStorage.getItem("name"),
             careToBeTaken: care,
             medicine: medicine,
-            date: formattedDate,
+            // date: formattedDate,
             address:localStorage.getItem("address"),
         };
 
@@ -62,11 +64,13 @@ export default function Prescription(props) {
             
                     doc.save(`Consultation_${data.patientName}_${formattedDate ||""}.pdf`);
                 }
+                setLoading(false)
                 props.showAlert('Prescription sent to patient successfully!', "success");
                 navigate("/consultation_req");
             }
         } catch (error) {
             console.log(error);
+            setLoading(false)
             props.showAlert('Internal server Issue', "Error");
           
         }
@@ -74,7 +78,7 @@ export default function Prescription(props) {
 
     return (
         <div className="container border mt-4 p-4">
-            <form onSubmit={handleSubmit}>
+           {!loading &&  <form onSubmit={handleSubmit}>
                 <div className="row flex">
                     <div className="col-md-6">
                         <p className="font-weight-bold mb-0">Dr {localStorage.getItem("name")}</p>
@@ -112,7 +116,8 @@ export default function Prescription(props) {
                         <p className="mt-4">Dr {localStorage.getItem("name")}</p>
                     </div>
                 </div>
-            </form>
+            </form>}
+            {loading && <Loader/>}
         </div>
     );
 }

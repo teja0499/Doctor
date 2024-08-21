@@ -1,18 +1,21 @@
 import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doctor_login } from '../Service/api';
+import Loader from '../loader/loader';
 
 export default function DoctorLogin(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault()
+      setLoading(true)
       const data=await doctor_login({email,password})
+      setLoading(false)
       if(data)
       {
         props.showAlert("Login  Successfully","success")
@@ -21,12 +24,19 @@ export default function DoctorLogin(props) {
         localStorage.setItem('address', data.address);
         localStorage.setItem('password', data.password);
         localStorage.setItem('userType', "doctor");
+       
         navigate("/consultation_req")
       }
       
     } catch (error) {
       console.log(error);
-      props.showAlert(error.response.data,"danger")
+      setLoading(false)
+      if(error?.response?.data)
+        {props.showAlert(error?.response?.data,"danger")}
+        else 
+        {
+          props.showAlert("Network issue","danger")
+        }
      
     }
   };
@@ -47,7 +57,7 @@ export default function DoctorLogin(props) {
   return (
     <div className='container' style={{ marginBottom:'5rem' }}>
        <h2>Doctor Login</h2>
-      <form onSubmit={handleSubmit}>
+     {!loading && <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             email
@@ -85,7 +95,8 @@ export default function DoctorLogin(props) {
             </button>
             
         </div>
-      </form>
+      </form>}
+      {loading && <Loader/>}
     </div>
   );
 }

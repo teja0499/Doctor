@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doctor_Ragister } from '../Service/api';
+import Loader from '../loader/loader';
 
 export default function DoctorRegisterform(props) {
     const [name, setName] = useState('');
@@ -12,11 +13,13 @@ export default function DoctorRegisterform(props) {
     const [experience, setExperience] = useState('');
     const [address, setAddress] = useState('');
     const [profilePicture, setProfilePicture] = useState(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (password === confirmPassword) {
+            setLoading(true)
             localStorage.clear();
             const body = {
                 name,
@@ -27,12 +30,11 @@ export default function DoctorRegisterform(props) {
                 address,
                 password,
             };
-          
-
             try {
                 const data = await doctor_Ragister(body,profilePicture);
                 if (data) {
                     props.showAlert("Account created Successfully", "success");
+                    setLoading(false)
                     navigate("/doctor_login");
                 }
                 console.log(data);
@@ -43,12 +45,13 @@ export default function DoctorRegisterform(props) {
         } else {
             props.showAlert("Password and confirm password do not match", "danger");
         }
+        setLoading(false)
     };
 
     return (
         <div className='container'>
             <h1>Doctor Registration Form</h1>
-            <form onSubmit={handleSubmit}>
+          { !loading && <form onSubmit={handleSubmit}>
             <div className="mb-3">
                     <label htmlFor="profilePicture" className="form-label">Profile Picture</label>
                     <input
@@ -176,7 +179,8 @@ export default function DoctorRegisterform(props) {
                         Login
                     </button>
                 </div>
-            </form>
+            </form>}
+            {loading && <Loader/>}
         </div>
     );
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getConsulatationHistory } from '../Service/api';
 import ConsultReqCard from './consult_req_card';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../loader/loader';
 
 export default function ConsultationHistory(props) {
     const [history, setHistory] = useState([]);
@@ -36,7 +37,7 @@ export default function ConsultationHistory(props) {
 
     return (
         <div className="container mt-4">
-            <div className="row">
+            {!loading &&<div className="row">
                 {history.length > 0 ? (
                     history.map((req) => (
                         <div className="col-md-4 mb-4" key={req.id}>
@@ -48,7 +49,8 @@ export default function ConsultationHistory(props) {
                         <h4>No consultation history available.</h4>
                     </div>
                 )}
-            </div>
+            </div>}
+            {loading && <Loader/>}
         </div>
     );
 }

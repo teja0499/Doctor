@@ -27,7 +27,8 @@ export default function ConsultCard(props) {
                     <p className="card-text mb-0" >
                         Illness: {currentIllness}
                     </p>
-                    <p>Status : {view ?"Completed":"Pending"}</p>
+                   
+                    <p>Status :  <strong>{view ?"Completed":"Pending"}</strong></p>
                     <div className="d-flex justify-content-between">
                         <button 
                             className="btn btn-secondary" 
