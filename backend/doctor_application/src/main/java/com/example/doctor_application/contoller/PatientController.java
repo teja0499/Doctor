@@ -42,16 +42,17 @@ public class PatientController {
 			// TODO: handle exception
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 		}
-	}
+	}  
 	
 	@PostMapping("/patient/login")
 	public ResponseEntity<?> login(@RequestHeader("email") String email,@RequestHeader("password") String password)
 	{
-		System.out.println("working");
+		System.out.println("user login working");
 		try {
 			Patient patient=pDao.login(email, password);
 			return ResponseEntity.status(200).body(patient);
 		} catch (Exception e) {
+			
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 		}
 	}

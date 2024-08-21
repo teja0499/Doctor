@@ -54,7 +54,7 @@ public class DoctorController {
 //			
 //			System.out.println(path);
 			 Doctor savedDoctor = doctorDao.signUp(newdoctor);
-	         return ResponseEntity.status(HttpStatus.CREATED).body(savedDoctor);
+			 return ResponseEntity.status(200).body(savedDoctor);
 		} 
 		catch (Exception e) {
 			// TODO: handle exception
@@ -66,11 +66,11 @@ public class DoctorController {
 	public ResponseEntity<?> login(@RequestHeader("email") String email,@RequestHeader("password") String password)
 	{
 		
-		System.out.println(email+""+password);
+		System.out.println("doctor login ");
 		try {
 			Doctor doctor=doctorDao.login(email, password);
-			return ResponseEntity.ok(doctor);
-		}  catch (EntityNotFoundException e) {
+			return ResponseEntity.status(200).body(doctor);
+		}  catch (Exception e) {
 			// TODO: handle exception
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 		}

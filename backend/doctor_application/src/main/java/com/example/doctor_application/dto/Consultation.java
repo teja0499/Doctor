@@ -35,11 +35,17 @@ public class Consultation {
   
     private String others;
     
+    private String address;
+    
     private String medicine;
     @Column(name = "care_to_be_taken")
     private String careToBeTaken;
     private String date;
     private boolean view;
+    @Column(name = "transaction_id" ,unique = true)
+    private String transactionId;
+    
+//    private boolean payment ;
     
     private String doctorName;
 
@@ -183,13 +189,38 @@ public class Consultation {
 	}
 
 
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
+
+	public String getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Consultation [id=" + id + ", patientName=" + patientName + ", did=" + did + ", pid=" + pid
-				+ ", currentIllness=" + currentIllness + ", recentSurgery=" + recentSurgery + ", diabetics=" + diabetics
-				+ ", allergies=" + allergies + ", others=" + others + ", medicine=" + medicine + ", careToBeTaken="
-				+ careToBeTaken + ", date=" + date + ", view=" + view + ", doctorName=" + doctorName + "]";
+		return "Consultation [id=" + id + ", patientName=" + patientName + ", currentIllness=" + currentIllness
+				+ ", recentSurgery=" + recentSurgery + ", diabetics=" + diabetics + ", allergies=" + allergies
+				+ ", others=" + others + ", medicine=" + medicine + ", careToBeTaken=" + careToBeTaken + ", date="
+				+ date + ", transactionId=" + transactionId + ", doctorName=" + doctorName + "]";
 	}
+	
+	
+
+	
+	
 	
 	
 	

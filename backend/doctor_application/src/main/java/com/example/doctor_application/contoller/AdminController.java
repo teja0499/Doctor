@@ -28,7 +28,7 @@ public class AdminController {
 		try {
 			Admin admin=adminDao.login(email, password);
 			return ResponseEntity.ok(admin);
-		}  catch (EntityNotFoundException e) {
+		}  catch (Exception e) {
 			// TODO: handle exception
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 		}

@@ -22,19 +22,19 @@ public class ConsultationDao {
 	public List<Consultation> findByDid(long did)
 	{
 		List<Consultation>consultations=cRepo.findByDidAndViewTrue(did); 
-		return consultations;
+		return consultations.reversed();
 	}
 	
 	public List<Consultation> findByPid(long pid)
 	{
 		List<Consultation>consultations=cRepo.findByPid(pid); 
-		return consultations;
+		return consultations.reversed();
 	}
 	
 	public List<Consultation> findByDidAndDoctorViewFalse(long did)
 	{
 		List<Consultation>consultations=cRepo.findByDidAndViewFalse(did); 
-		return consultations;
+		return consultations.reversed();
 	}
 	public Consultation update(Consultation consultation)
 	{
@@ -45,6 +45,12 @@ public class ConsultationDao {
 	public List<Consultation> getAllConsultation()
 	{
 		List<Consultation>consultations=cRepo.findAll();
-		return consultations;
+		return consultations.reversed();
 	}
+	
+	public boolean existsByTransactionId(String Id)
+	{
+		return cRepo.existsByTransactionId(Id);
+	} 
+	
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.doctor_application.dao.ConsultationDao;
@@ -96,6 +97,18 @@ public class ConsultationController {
 		try {
 			List<Consultation> consultations=cDao.getAllConsultation();
 			return ResponseEntity.ok(consultations);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+		}
+	}
+	
+	@GetMapping("/payment_check/{tid}")
+	public ResponseEntity<?> existsByTransactionId(@PathVariable("tid") String Id)
+	{
+		System.out.println("check trans id");
+		try {
+			return ResponseEntity.ok(cDao.existsByTransactionId(Id));
 		} catch (Exception e) {
 			// TODO: handle exception
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());

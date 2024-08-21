@@ -15,5 +15,7 @@ public interface ConsultationRepo extends JpaRepository<Consultation,Long>{
 	List<Consultation> findByDidAndViewTrue(long did);
 	
 	List<Consultation> findByPid(long pid);
+	
+	boolean existsByTransactionId(String Id);
 
 }

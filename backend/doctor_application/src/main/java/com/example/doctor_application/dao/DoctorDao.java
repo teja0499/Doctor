@@ -29,6 +29,7 @@ public class DoctorDao {
 		}
 		return drepo.save(doctor);
 	}
+	
 	public Doctor login(String email,String password)
 	{
 		Doctor doctor=drepo.findByEmailAndPassword(email, password);
@@ -37,6 +38,7 @@ public class DoctorDao {
 		{
 			throw new EntityNotFoundException("Credential missmatch");
 		}
+//		System.out.println(drepo.findByEmail(email));
 		return doctor;
 	}
 	
