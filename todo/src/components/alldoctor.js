@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getAllDoctor } from '../Service/api';
 import { useNavigate } from 'react-router-dom';
 import DoctorCard from './doctorcard';
+import Loader from '../loader/loader';
 
 export default function AllDoctor(props) {
     const [doctors, setDoctors] = useState([]);
@@ -39,13 +40,12 @@ export default function AllDoctor(props) {
         fetchDoctors();
     }, []);
 
-    if (loading) {
-        return <div className="container mt-4"><p>Loading...</p></div>;
-    }
+   
 
     return (
         <div className='container '>
-           {!info && <div className='row'>
+            {loading && <Loader/>}
+           {!info && !loading && <div className='row'>
                 {doctors.map((doctor) => (
                     <div className='col-md-4 mb-4' key={doctor.did}>
                         <DoctorCard doctor={doctor} showInfo={showInfo} handleConsult={handleConsult} />
@@ -53,7 +53,7 @@ export default function AllDoctor(props) {
                 ))}
             </div>}
 
-          {info &&  <div >
+          {info && <div >
                 <h2>Information Display</h2>
                 <div style={{ marginBottom: '1rem' }}>
                     <div style={{ marginBottom: '0.5rem' }}>

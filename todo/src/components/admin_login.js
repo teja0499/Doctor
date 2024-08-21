@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../loader/loader';
+import { admin_login } from '../Service/api';
 
 export default function AdminLoginForm(props) {
     const [email, setEmail] = useState('');
@@ -13,8 +14,10 @@ export default function AdminLoginForm(props) {
         try {
             setloading(true)
             e.preventDefault();
-            // const data = await admin_login({ email, password });
-            const data={}
+            const data = await admin_login({ email, password });
+            // const data={}
+            console.log(data);
+            
             if (data) {
                 props.showAlert("Login Successful", "success");
                 localStorage.setItem('aid', data.aid);
@@ -28,7 +31,7 @@ export default function AdminLoginForm(props) {
         } catch (error) {
             console.log(error);
             setloading(false)
-            props.showAlert(error?.response?.data, "danger");
+            props.showAlert(error.response.data || "internal server erroe","danger")
         }
         setloading(false)
     };

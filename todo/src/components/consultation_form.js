@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useLocation,useNavigate  } from 'react-router-dom';
 import { saveConsultation } from '../Service/api';
+import Payment from './payment';
 
 const initialStep1 = { currentIllness: '', recentSurgery: '' };
 const initialStep2 = { diabetics: '', allergies: '', others: '' };
 
 const ConsultationForm = (props) => {
     const [currentStep, setCurrentStep] = useState(1);
+    const[payment,setPaymet]=useState(false)
     const [formData, setFormData] = useState({
         step1: initialStep1,
         step2: initialStep2
@@ -38,29 +40,39 @@ const ConsultationForm = (props) => {
         setCurrentStep(3);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (transactionId) => {
         try {
+            setPaymet(false)
            console.log(formData);
            const body={
             ...formData.step1,
             ...formData.step2,
             did:doctor.did,
             pid:localStorage.getItem("pid"),
-            patientName:localStorage.getItem("name")
+            patientName:localStorage.getItem("name"),
+            doctorName:doctor.name,
+            transactionId:transactionId
            }
            const data=await saveConsultation(body);
 
            console.log(data);           
+           setPaymet(false);
            props.showAlert("Information submitted Successfully","success")
         } catch (error) {
             console.log(error);
             props.showAlert(error.response.data,"danger")  
+            setPaymet(false);
         }
-       navigate(-1);
+    //    navigate(-1);
     };
+    const paymentMethod=()=>{
+        setPaymet(true);
+    }
 
     return (
         <div className="container mt-4">
+          
+          {!payment && <div>
             {currentStep === 1 && (
                 <form onSubmit={handleSubmitStep1}>
                     <h2>Step 1: Current Illness and Recent Surgery</h2>
@@ -207,9 +219,12 @@ const ConsultationForm = (props) => {
                         />
                     </div>
                     <button type="button" className="btn btn-secondary mb-3 mt-5  mx-2" onClick={() => setCurrentStep(2)}>Back</button>
-                    <button type="button" className="btn btn-primary mb-3 mt-5 " onClick={handleSubmit}>Submit</button>
+                    <button type="button" className="btn btn-primary mb-3 mt-5 " onClick={paymentMethod}>Submit</button>
                 </form>
             )}
+            </div>}
+            {payment && <Payment handleSubmit={handleSubmit} showAlert={props.showAlert} doctor={doctor}/>}
+            
         </div>
     );
 };

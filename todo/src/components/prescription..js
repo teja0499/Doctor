@@ -26,6 +26,7 @@ export default function Prescription(props) {
             careToBeTaken: care,
             medicine: medicine,
             date: formattedDate,
+            address:localStorage.getItem("address"),
         };
 
         try {
@@ -39,28 +40,35 @@ export default function Prescription(props) {
                     const doc = new jsPDF();
                     doc.setFontSize(12);
                     doc.text(`Doctor Name: ${localStorage.getItem("name")}`, 10, 10);
-                    doc.text(`Address: ${localStorage.getItem("address")}`, 10, 20);
+                    doc.text(`Date: ${formattedDate}`, 160, 10);
+                    doc.text(`Address: ${localStorage.getItem("address")}`,10,20);
                     doc.text(`Patient Name: ${data.patientName}`, 10, 30);
-                    doc.text(`Date: ${formattedDate}`, 10, 40);
+            
+                    doc.setFillColor(1, 0,100); 
+                    doc.rect(0, 40, 250, 3, 'F');
+            
                     doc.text(`Care to be taken:`, 10, 50);
-                    doc.text(care, 10, 60);
-                    doc.text(`Medicine:`, 10, 80);
-                    doc.text(medicine, 10, 90);
-
-
-                    doc.text(`Doctor Signature: ____________________`, 10, 110);
-
-                    doc.save('prescription.pdf');  
+                    doc.rect(10, 52, 190, 30);
+                    doc.text(care || "NA", 12, 60);
+            
+                    doc.text(`Medicine:`, 10, 93);
+                    doc.rect(10, 95, 190, 50);
+                    doc.text(medicine|| "NA", 12, 100);
+            
+                    doc.setFillColor(1, 0,100); 
+                    doc.rect(0, 150, 250, 3, 'F');
+            
+                    doc.text(localStorage.getItem("name"), 150, 180);
+            
+                    doc.save(`Consultation_${data.patientName}_${formattedDate ||""}.pdf`);
                 }
-
-               
                 props.showAlert('Prescription sent to patient successfully!', "success");
                 navigate("/consultation_req");
             }
         } catch (error) {
             console.log(error);
             props.showAlert('Internal server Issue', "Error");
-            // Handle error (e.g., show an alert or message)
+          
         }
     };
 

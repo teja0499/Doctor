@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { getAllprescription } from '../Service/api'; // Adjust import path as needed
+import Loader from '../loader/loader';
 
-export default function GetAllprescription() {
+export default function GetAllprescription(props) {
     const [prescription, setPrescription] = useState([]);
     const [info, setInfo] = useState(false);
     const [consultation, setConsultation] = useState(null);
+    const[loading,setloading]=useState(false)
     
 
     const fetchprescription = async () => {
         try {
+            setloading(true)
             const data = await getAllprescription();
             setPrescription(data);
+            setloading(false)
         } catch (error) {
             console.error(error);
+            props.showAlert("Internal server issue", "danger");
+            setloading(false)
             // Handle error properly, e.g., show an alert or message
         }
     };
@@ -28,7 +34,8 @@ export default function GetAllprescription() {
 
     return (
         <div className='container'>
-            {!info && (
+            {loading && <Loader/>}
+            {!info && (!loading &&
                 prescription.length !== 0 ? (
                     <div className='row'>
                         {prescription.map((data, index) => (
@@ -47,7 +54,7 @@ export default function GetAllprescription() {
                     </h4>
                 )
             )}
-            {info &&  (
+            {info &&  ( !loading &&
                 <div>
                     <h2>Consultation Details</h2>
                     <div style={{ marginBottom: '1rem' }}>

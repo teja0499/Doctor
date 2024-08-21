@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { approved_doctor, get_new_doctor } from '../Service/api'
+import Loader from '../loader/loader';
 
 
 export default function NewDoctor() {
     const [doctorData, setDoctorData] = useState([]);
     const [info, setInfo] = useState(false);
     const [doctor, setDoctor] = useState(null);
+    const[loading ,setloading]=useState(false)
 
     const getDoctors = async () => {
         try {
+            setloading(true)
             const data = await get_new_doctor();
             setDoctorData(data);
             console.log(data);
+            setloading(false)
         } catch (error) {
             console.error(error);
+            setloading(false)
         }
+        
     };
 
     const showInfo = (data) => {
@@ -25,14 +31,17 @@ export default function NewDoctor() {
 
     const isApprove = async (data, flag) => {
         try {
+            setloading(true)
             const doctorData = {
                 ...data,
                 adminApprove: flag,
             };
             await approved_doctor(doctorData);
             getDoctors();
+            setloading(false)
         } catch (error) {
             console.error(error);
+            setloading(false)
         }
     };
 
@@ -42,7 +51,8 @@ export default function NewDoctor() {
 
     return (
         <div className='container'>
-            {!info && (
+            {loading && <Loader/>}
+            {!info && (!loading &&
                 doctorData.length!==0 ?  <div className='row'>
                     {doctorData.map((data, index) => (
                         <div className='col-md-4 mb-4' key={index}>
@@ -58,7 +68,7 @@ export default function NewDoctor() {
                 <h4 style={{textAlign:'center'}}><p>No New Docotor Register</p></h4>
             )
             }
-            {info && doctor && (
+            {info && doctor && (!loading &&
                 <div>
                     <h2>Information Display</h2>
                     <div style={{ marginBottom: '1rem' }}>

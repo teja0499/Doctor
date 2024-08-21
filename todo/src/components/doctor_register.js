@@ -33,7 +33,7 @@ export default function DoctorRegisterform(props) {
                 const data = await doctor_Ragister(body,profilePicture);
                 if (data) {
                     props.showAlert("Account created Successfully", "success");
-                    navigate("/");
+                    navigate("/doctor_login");
                 }
                 console.log(data);
             } catch (error) {

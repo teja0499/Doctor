@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function ConsultationReq(props) {
     const [consultationReq, setConsultationReq] = useState([]);
+    const [loading,setLoading]=useState(false);
     const navigate = useNavigate();
 
     const consReq = async () => {

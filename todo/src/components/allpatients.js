@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { getAllUser } from '../Service/api';
+import Loader from '../loader/loader';
 
 export default function AllPatients() {
     const [patients, setPatients] = useState([]);
     const [info, setInfo] = useState(false);
     const [patient, setPatient] = useState(null);
+    const[loading ,setloading]=useState(false)
 
     const getPatients = async () => {
         try {
+            setloading(true)
             const data = await getAllUser();
             setPatients(data);
+            setloading(false)
         } catch (error) {
             console.error(error);
             // Handle error properly, e.g., show an alert or message
@@ -28,7 +32,8 @@ export default function AllPatients() {
 
     return (
         <div className='container'>
-            {!info && (
+            {loading && <Loader/>}
+            {!info && ( !loading &&
                 patients.length !== 0 ? (
                     <div className='row'>
                         {patients.map((data, index) => (
@@ -47,7 +52,7 @@ export default function AllPatients() {
                     </h4>
                 )
             )}
-            {info && patient && (
+            {info && patient && (!loading &&
                 <div>
                     <h2>Patient Information</h2>
                     <div style={{ marginBottom: '1rem' }}>
